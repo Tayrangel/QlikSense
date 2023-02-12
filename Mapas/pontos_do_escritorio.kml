@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document id="root_doc">
+<Schema name="pontos_do_escritorio" id="pontos_do_escritorio">
+	<SimpleField name="id" type="float"></SimpleField>
+	<SimpleField name="Nome_ponto" type="string"></SimpleField>
+</Schema>
+<Folder><name>pontos_do_escritorio</name>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">1</SimpleData>
+		<SimpleData name="Nome_ponto">Superior_Esquerdo</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.000021815208211,-0.000075132862434</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">2</SimpleData>
+		<SimpleData name="Nome_ponto">Inferior_Direito</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.007657398008061,-0.006835445219531</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">3</SimpleData>
+		<SimpleData name="Nome_ponto">Sala de Reunião 1</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.001323204131866,-0.000904336424367</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">4</SimpleData>
+		<SimpleData name="Nome_ponto">Sala de Reunião 2</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.002889477526707,-0.000835236127541</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">5</SimpleData>
+		<SimpleData name="Nome_ponto">Sala do Presidente</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.006816677729948,-0.001146187463244</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">6</SimpleData>
+		<SimpleData name="Nome_ponto">Livre Circulação</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.00373019780482,-0.003576214566229</coordinates></Point>
+  </Placemark>
+  <Placemark>
+	<ExtendedData><SchemaData schemaUrl="#pontos_do_escritorio">
+		<SimpleData name="id">7</SimpleData>
+		<SimpleData name="Nome_ponto">Espaço de trabalho</SimpleData>
+	</SchemaData></ExtendedData>
+      <Point><coordinates>0.003211945578586,-0.005096421092117</coordinates></Point>
+  </Placemark>
+</Folder>
+</Document></kml>
