@@ -3,6 +3,18 @@ define( [ "qlik"
 function ( qlik) {
 
 	return {
+
+		initialProperties: {
+			qhypercubeDef: {
+				qDimensions: [],
+				qMeasures: [],
+				qInitialDataFetch: [{
+					qWidth: 10,
+					qHeight: 1000
+				}]
+			}
+		},
+
 		definition: {
 			type: "items",
 			component: "accordion",
@@ -17,7 +29,27 @@ function ( qlik) {
 					uses: "addons"
 				},
 				settings: {
-					uses: "settings"
+					uses: "settings",
+					items: {
+						MyIntPropX: {
+							type: "items",
+							label: "Valor Mínimo X e Valor Máximo Y",
+							items: {
+								MyIntPropMin: {
+								type: "integer",
+								label: "Valor Mínimo X",
+								ref: "myproperties.min",
+								defaultValue: "10"
+								},
+								MyIntPropMax: {
+									type: "integer",
+									label: "Valor Máximo Y",
+									ref: "myproperties.max",
+									defaultValue: "10"
+								}
+							}
+						}
+					}
 				}
 			}
 		},
@@ -28,9 +60,9 @@ function ( qlik) {
 			exportData : true
 		},
 		
-		paint: function ($element) {
+		paint: function ($element, layout) {
 			//add your rendering code here
-			$element.html( "Hello World!" );
+			$element.html( layout.myproperties.min );
 			//needed for export
 			return qlik.Promise.resolve();
 		}
