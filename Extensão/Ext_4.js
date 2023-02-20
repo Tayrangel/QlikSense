@@ -46,6 +46,29 @@ function ( qlik) {
 									label: "Valor Máximo Y",
 									ref: "myproperties.max",
 									defaultValue: "10"
+								},
+								MyIntPropNum: {
+									type: "number",
+									label: "Valor Numérico",
+									ref: "myproperties.num",
+									defaultValue: "10.50"
+								},
+								MyIntPropString: {
+									type: "string",
+									label: "Expressão de cor ou valor",
+									ref: "myproperties.cor_valor",
+									defaultValue: "",
+									expression: "always",
+									show: true
+								},
+								MyIntPropButton: {
+									label: "Botão",
+									ref: "myproperties.botão",
+									component: "button",
+									action: function(data) {
+											//add your button action hera
+											alert("My visalization extension name is '" + data.visualization + "' and have id '" + data.qInfo.qID + "'.");
+									}
 								}
 							}
 						}
@@ -62,7 +85,8 @@ function ( qlik) {
 		
 		paint: function ($element, layout) {
 			//add your rendering code here
-			$element.html( layout.MyIntPropMin );
+			var valor_html = layout.MyIntPropNum + layout.MyIntPropMin
+			$element.html( layout.MyIntPropString );
 			//needed for export
 			return qlik.Promise.resolve();
 		}

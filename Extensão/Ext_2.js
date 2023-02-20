@@ -46,6 +46,12 @@ function ( qlik) {
 									label: "Valor Máximo Y",
 									ref: "myproperties.max",
 									defaultValue: "10"
+								},
+								MyIntPropNum: {
+									type: "number",
+									label: "Valor Numérico",
+									ref: "myproperties.num",
+									defaultValue: "10.50"
 								}
 							}
 						}
@@ -62,7 +68,8 @@ function ( qlik) {
 		
 		paint: function ($element, layout) {
 			//add your rendering code here
-			$element.html( layout.MyIntPropMin );
+			var valor_html = layout.MyIntPropNum + layout.MyIntPropMin
+			$element.html( valor_html );
 			//needed for export
 			return qlik.Promise.resolve();
 		}
