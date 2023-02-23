@@ -1,0 +1,42 @@
+.pai{
+	position: absolute;
+}
+
+.img {
+	-webkit-mask-imagen: url('Imagem6.png');
+	-webkit-mask-size: 100% 70%;
+	-webkit-mask-repeat: no-repeat;
+	position absolute;
+	width: 100%;
+	height: 70%;
+}
+
+.legenda {
+	position: absolute;
+	width: 100%;
+	height: 30%;
+	bottom: 0px;
+	text-align: center;
+}
+
+.qv-object-figura_com_preenchimento div.qv-object-content-container {
+	overflow: auto;
+}
+.qv-object-figura_com_preenchimento td,
+.qv-object-figura_com_preenchimento th {
+	border-top: 0px solid #fff;
+	border-bottom: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	cursor: default;
+	font-size: 12px;
+}
+.qv-object-figura_com_preenchimento td.numeric {
+	text-align: right;
+}
+.qv-object-figura_com_preenchimento button {
+	width: 100%;
+}
