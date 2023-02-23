@@ -74,7 +74,7 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent )
 			
 			console.log (layout);
 			
-			for (var c=0; c < layout.qHyperCube.qDataPages[0].qMatrix.length, c++) {
+			for (var c=0; c < layout.qHyperCube.qDataPages[0].qMatrix.length; c++) {
 			
 				var cor_1 = layout.qHyperCube.qDataPages[0].qMatrix[c][1].qAttrExps.qValues[0].qText;
 				var cor_2 = layout.qHyperCube.qDataPages[0].qMatrix[c][2].qAttrExps.qValues[0].qText;
