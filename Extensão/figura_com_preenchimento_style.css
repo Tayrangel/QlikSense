@@ -2,11 +2,12 @@
 	position: absolute;
 }
 
-.img {
-	-webkit-mask-imagen: url('Imagem6.png');
+.img_figura {
+	background-image: linear-gradient(to top, gold 20%, black);
+	-webkit-mask-imagen: url('http://localhost/extension/figura_com_preenchimento/user.png');
 	-webkit-mask-size: 100% 70%;
 	-webkit-mask-repeat: no-repeat;
-	position absolute;
+	position: absolute;
 	width: 100%;
 	height: 70%;
 }

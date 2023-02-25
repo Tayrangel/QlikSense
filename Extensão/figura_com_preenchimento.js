@@ -62,11 +62,17 @@ define( ["qlik", "jquery", "text!./style.css"], function ( qlik, $, cssContent )
 			var html = '';
 			
 			html += '<div class="pai">';
-			html += '<div class="img"></div>';
+			html += '<div class="img_figura"></div>';
 			html += '<div class="legenda"> '+ numero +' </div>';
 			html += '</div>';
 			
 			$element.html(html);
+			
+			$(".img_figura").css("background-image", "linear-gradient(to-top, gold "+ numero +", black)");
+			
+			var altura = ($("legenda").height()+$(".legenda").width())*0.25;
+			
+			$(".legenda").css("font-size", altura);
 		}
 	};
 } );

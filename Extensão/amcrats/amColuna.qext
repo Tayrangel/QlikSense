@@ -1,6 +1,6 @@
 {
-	"name": "figura_com_preenchimento",
-	"description": "Table visualization template",
+	"name": "amColuna",
+	"description": "Criando extensão utilizando biblioteca externa (amcharts)",
 	"icon": "table",
 	"type": "visualization",
 	"version": "1.0.0",
