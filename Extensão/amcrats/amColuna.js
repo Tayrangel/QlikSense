@@ -4,6 +4,7 @@ require.config({
 		"charts": "/extensions/amColuna/charts",
 		"animated": "/extensions/amColuna/animated",
 	},
+	//configuração do amCharts
     shim: {
         'amcharts4/core': {
             init: function () {
@@ -49,7 +50,16 @@ define( ["qlik", "jquery", "text!./style.css", "core", "charts", "animated"], fu
 			items: {
 				dimensions: {
 					uses: "dimensions",
-					min: 0
+					min: 0,
+					items: {
+						imagens_bullet: {
+							type: "string",
+							expression: "optional",
+							expressionType: "dimension",
+							ref: "qAttributeExpressions.0.qExpression",
+							label: "Imagens no Bullet"
+						}
+					}
 				},
 				measures: {
 					uses: "measures",
@@ -59,7 +69,15 @@ define( ["qlik", "jquery", "text!./style.css", "core", "charts", "animated"], fu
 					uses: "sorting"
 				},
 				settings: {
-					uses: "settings"
+					uses: "settings",
+					items: {
+						MyStringProp: {
+							ref: "bullet",
+							type: "boolean",
+							label: "Imagem",
+							defaultValue: false
+						}
+					}
 				}
 			}
 		},
@@ -70,241 +88,127 @@ define( ["qlik", "jquery", "text!./style.css", "core", "charts", "animated"], fu
 			var html = '<div id="chartdiv">Hello World</div>';
 			$element.html(html);
 			
-			am5.ready(function() {
+			var numero_de_linhas = layout.qHyperCube.qDataPages[0].qMatrix.length;
+			var dados =[];
+			var c=0;
+			
+			for(c=0;c<numero_de_linhas; c++){
+			 	dados.push({
+					"name": layout.qHyperCube.qDataPages[0].qMatrix[c][0].qText,
+					"steps": layout.qHyperCube.qDataPages[0].qMatrix[c][1].qNum,
+					"href": layout.qHyperCube.qDataPages[0].qMatrix[c][0].qAttrExps.qValues[0].qText,
+				});
+			}
+			 
+			 
+			// Retirado do site amCharts e editado para que retorna-se as edições do painel qlik
+			am4core.ready(function() {
 
-				// Create root element
-				// https://www.amcharts.com/docs/v5/getting-started/#Root_element
-				var root = am5.Root.new("chartdiv");
+				// Themes begin
+				am4core.useTheme(am4themes_animated);
+				// Themes end
 
-				// Set themes
-				// https://www.amcharts.com/docs/v5/concepts/themes/
-				root.setThemes([
-				  am5themes_Animated.new(root)
-				]);
+				/**
+				 * Chart design taken from Samsung health app
+				 */
 
-				var data = [{
-				  name: "Monica",
-				  steps: 45688,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/monica.jpg"
-				  }
-				}, {
-				  name: "Joey",
-				  steps: 35781,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/joey.jpg"
-				  }
-				}, {
-				  name: "Ross",
-				  steps: 25464,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/ross.jpg"
-				  }
-				}, {
-				  name: "Phoebe",
-				  steps: 18788,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/phoebe.jpg"
-				  }
-				}, {
-				  name: "Rachel",
-				  steps: 15465,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/rachel.jpg"
-				  }
-				}, {
-				  name: "Chandler",
-				  steps: 11561,
-				  pictureSettings: {
-					src: "https://www.amcharts.com/wp-content/uploads/2019/04/chandler.jpg"
-				  }
-				}];
+				var chart = am4core.create(layout.qInfo.qId, am4charts.XYChart);
+				chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+				chart.paddingBottom = 30;
+				chart.data = dados;
 
-				// Create chart
-				// https://www.amcharts.com/docs/v5/charts/xy-chart/
-				var chart = root.container.children.push(
-				  am5xy.XYChart.new(root, {
-					panX: false,
-					panY: false,
-					wheelX: "none",
-					wheelY: "none",
-					paddingBottom: 50,
-					paddingTop: 40
-				  })
-				);
+				var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+				categoryAxis.dataFields.category = "name";
+				categoryAxis.renderer.grid.template.strokeOpacity = 0;
+				categoryAxis.renderer.minGridDistance = 10;
+				categoryAxis.renderer.labels.template.dy = 35;
+				categoryAxis.renderer.tooltip.dy = 35;
 
-				// Create axes
-				// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+				var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+				valueAxis.renderer.inside = true;
+				valueAxis.renderer.labels.template.fillOpacity = 0.3;
+				valueAxis.renderer.grid.template.strokeOpacity = 0;
+				valueAxis.min = 0;
+				valueAxis.cursorTooltipEnabled = false;
+				valueAxis.renderer.baseGrid.strokeOpacity = 0;
 
-				var xRenderer = am5xy.AxisRendererX.new(root, {});
-				xRenderer.grid.template.set("visible", false);
+				var series = chart.series.push(new am4charts.ColumnSeries);
+				series.dataFields.valueY = "steps";
+				series.dataFields.categoryX = "name";
+				series.tooltipText = "{valueY.value}";
+				series.tooltip.pointerOrientation = "vertical";
+				series.tooltip.dy = - 6;
+				series.columnsContainer.zIndex = 100;
 
-				var xAxis = chart.xAxes.push(
-				  am5xy.CategoryAxis.new(root, {
-					paddingTop:40,
-					categoryField: "name",
-					renderer: xRenderer
-				  })
-				);
+				var columnTemplate = series.columns.template;
+				columnTemplate.width = am4core.percent(50);
+				columnTemplate.maxWidth = 66;
+				columnTemplate.column.cornerRadius(60, 60, 10, 10);
+				columnTemplate.strokeOpacity = 0;
 
+				series.heatRules.push({ target: columnTemplate, property: "fill", dataField: "valueY", min: am4core.color("#e5dc36"), max: am4core.color("#5faa46") });
+				series.mainContainer.mask = undefined;
 
-				var yRenderer = am5xy.AxisRendererY.new(root, {});
-				yRenderer.grid.template.set("strokeDasharray", [3]);
+				var cursor = new am4charts.XYCursor();
+				chart.cursor = cursor;
+				cursor.lineX.disabled = true;
+				cursor.lineY.disabled = true;
+				cursor.behavior = "none";
+				
+				if(layout.bullet) {
+				
+					//Inicio Bullet
+					var bullet = columnTemplate.createChild(am4charts.CircleBullet);
+					bullet.circle.radius = 30;
+					bullet.valign = "bottom";
+					bullet.align = "center";
+					bullet.isMeasured = true;
+					bullet.mouseEnabled = false;
+					bullet.verticalCenter = "bottom";
+					bullet.interactionsEnabled = false;
 
-				var yAxis = chart.yAxes.push(
-				  am5xy.ValueAxis.new(root, {
-					min: 0,
-					renderer: yRenderer
-				  })
-				);
-
-				// Add series
-				// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-				var series = chart.series.push(
-				  am5xy.ColumnSeries.new(root, {
-					name: "Income",
-					xAxis: xAxis,
-					yAxis: yAxis,
-					valueYField: "steps",
-					categoryXField: "name",
-					sequencedInterpolation: true,
-					calculateAggregates: true,
-					maskBullets: false,
-					tooltip: am5.Tooltip.new(root, {
-					  dy: -30,
-					  pointerOrientation: "vertical",
-					  labelText: "{valueY}"
+					var hoverState = bullet.states.create("hover");
+					var outlineCircle = bullet.createChild(am4core.Circle);
+					outlineCircle.adapter.add("radius", function (radius, target) {
+						var circleBullet = target.parent;
+						return circleBullet.circle.pixelRadius + 10;
 					})
-				  })
-				);
 
-				series.columns.template.setAll({
-				  strokeOpacity: 0,
-				  cornerRadiusBR: 10,
-				  cornerRadiusTR: 10,
-				  cornerRadiusBL: 10,
-				  cornerRadiusTL: 10,
-				  maxWidth: 50,
-				  fillOpacity: 0.8
-				});
+					var image = bullet.createChild(am4core.Image);
+					image.width = 60;
+					image.height = 60;
+					image.horizontalCenter = "middle";
+					image.verticalCenter = "middle";
+					image.propertyFields.href = "href";
 
-				var currentlyHovered;
+					image.adapter.add("mask", function (mask, target) {
+						var circleBullet = target.parent;
+						return circleBullet.circle;
+					})
 
-				series.columns.template.events.on("pointerover", function (e) {
-				  handleHover(e.target.dataItem);
-				});
+					var previousBullet;
+					chart.cursor.events.on("cursorpositionchanged", function (event) {
+						var dataItem = series.tooltipDataItem;
 
-				series.columns.template.events.on("pointerout", function (e) {
-				  handleOut();
-				});
+						if (dataItem.column) {
+							var bullet = dataItem.column.children.getIndex(1);
 
-				function handleHover(dataItem) {
-				  if (dataItem && currentlyHovered != dataItem) {
-					handleOut();
-					currentlyHovered = dataItem;
-					var bullet = dataItem.bullets[0];
-					bullet.animate({
-					  key: "locationY",
-					  to: 1,
-					  duration: 600,
-					  easing: am5.ease.out(am5.ease.cubic)
-					});
-				  }
+							if (previousBullet && previousBullet != bullet) {
+								previousBullet.isHover = false;
+							}
+
+							if (previousBullet != bullet) {
+
+								var hs = bullet.states.getKey("hover");
+								hs.properties.dy = -bullet.parent.pixelHeight + 30;
+								bullet.isHover = true;
+
+								previousBullet = bullet;
+							}
+						}
+					})
 				}
-
-				function handleOut() {
-				  if (currentlyHovered) {
-					var bullet = currentlyHovered.bullets[0];
-					bullet.animate({
-					  key: "locationY",
-					  to: 0,
-					  duration: 600,
-					  easing: am5.ease.out(am5.ease.cubic)
-					});
-				  }
-				}
-
-				var circleTemplate = am5.Template.new({});
-
-				series.bullets.push(function (root, series, dataItem) {
-				  var bulletContainer = am5.Container.new(root, {});
-				  var circle = bulletContainer.children.push(
-					am5.Circle.new(
-					  root,
-					  {
-						radius: 34
-					  },
-					  circleTemplate
-					)
-				  );
-
-				  var maskCircle = bulletContainer.children.push(
-					am5.Circle.new(root, { radius: 27 })
-				  );
-
-				  // only containers can be masked, so we add image to another container
-				  var imageContainer = bulletContainer.children.push(
-					am5.Container.new(root, {
-					  mask: maskCircle
-					})
-				  );
-
-				  var image = imageContainer.children.push(
-					am5.Picture.new(root, {
-					  templateField: "pictureSettings",
-					  centerX: am5.p50,
-					  centerY: am5.p50,
-					  width: 60,
-					  height: 60
-					})
-				  );
-
-				  return am5.Bullet.new(root, {
-					locationY: 0,
-					sprite: bulletContainer
-				  });
-				});
-
-				// heatrule
-				series.set("heatRules", [
-				  {
-					dataField: "valueY",
-					min: am5.color(0xe5dc36),
-					max: am5.color(0x5faa46),
-					target: series.columns.template,
-					key: "fill"
-				  },
-				  {
-					dataField: "valueY",
-					min: am5.color(0xe5dc36),
-					max: am5.color(0x5faa46),
-					target: circleTemplate,
-					key: "fill"
-				  }
-				]);
-
-				series.data.setAll(data);
-				xAxis.data.setAll(data);
-
-				var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
-				cursor.lineX.set("visible", false);
-				cursor.lineY.set("visible", false);
-
-				cursor.events.on("cursormoved", function () {
-				  var dataItem = series.get("tooltip").dataItem;
-				  if (dataItem) {
-					handleHover(dataItem);
-				  } else {
-					handleOut();
-				  }
-				});
-
-				// Make stuff animate on load
-				// https://www.amcharts.com/docs/v5/concepts/animations/
-				series.appear();
-				chart.appear(1000, 100);
-
-			}); // end am5.ready()
+			}); // end am4core.ready()
 			
 			return qlik.Promise.resolve();
 		}
